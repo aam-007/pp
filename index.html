@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Python Quick Reference — S046</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0c0c0e;
+    --surface: #131316;
+    --surface2: #1a1a1f;
+    --border: #2a2a32;
+    --accent: #e8c547;
+    --accent2: #5ae4a0;
+    --accent3: #7c9fff;
+    --accent4: #ff7c7c;
+    --text: #e8e8f0;
+    --muted: #7a7a90;
+    --code-bg: #0f0f14;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* Sticky nav */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(12,12,14,0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    display: flex; align-items: center; gap: 4px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  nav::-webkit-scrollbar { display: none; }
+  .nav-brand {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    font-weight: 600;
+    padding: 14px 16px 14px 0;
+    border-right: 1px solid var(--border);
+    margin-right: 8px;
+    white-space: nowrap;
+  }
+  nav a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 14px 10px;
+    white-space: nowrap;
+    transition: color 0.15s;
+    letter-spacing: 0.04em;
+  }
+  nav a:hover { color: var(--text); }
+
+  /* Layout */
+  .container { max-width: 1100px; margin: 0 auto; padding: 48px 32px 80px; }
+
+  /* Hero */
+  .hero {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 36px;
+    margin-bottom: 48px;
+  }
+  .hero-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .hero h1 {
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin-bottom: 10px;
+  }
+  .hero h1 span { color: var(--accent); }
+  .hero p { color: var(--muted); font-size: 14px; }
+  .pill-row { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
+  .pill {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+  .pill.y { border-color: var(--accent); color: var(--accent); }
+  .pill.g { border-color: var(--accent2); color: var(--accent2); }
+  .pill.b { border-color: var(--accent3); color: var(--accent3); }
+
+  /* Section */
+  .section { margin-bottom: 64px; }
+  .section-header {
+    display: flex; align-items: baseline; gap: 12px;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    background: rgba(232,197,71,0.08);
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+  .section-title {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  /* Sub-blocks */
+  .block { margin-bottom: 28px; }
+  .block-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent2);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  /* Code */
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    line-height: 1.65;
+  }
+  code { font-family: var(--mono); font-size: 12.5px; }
+  .kw { color: #c792ea; }
+  .fn { color: #82aaff; }
+  .st { color: #c3e88d; }
+  .cm { color: #546e7a; font-style: italic; }
+  .nm { color: #f78c6c; }
+  .op { color: #89ddff; }
+  .bl { color: #ffcb6b; }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-bottom: 16px;
+  }
+  th {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    text-align: left;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  td {
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    vertical-align: top;
+  }
+  td code {
+    color: var(--accent3);
+    background: rgba(124,159,255,0.08);
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 12px;
+  }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+  td:first-child { color: var(--accent); font-family: var(--mono); font-size: 12px; }
+
+  /* Two-col grid */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+
+  /* Mini card */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px 16px;
+  }
+  .card-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 10px;
+    letter-spacing: 0.06em;
+  }
+
+  /* Note callout */
+  .note {
+    background: rgba(232,197,71,0.05);
+    border-left: 3px solid var(--accent);
+    padding: 10px 14px;
+    border-radius: 0 4px 4px 0;
+    font-size: 13px;
+    color: var(--muted);
+    margin: 12px 0;
+  }
+  .note strong { color: var(--accent); }
+
+  .note.green {
+    background: rgba(90,228,160,0.05);
+    border-color: var(--accent2);
+  }
+  .note.green strong { color: var(--accent2); }
+
+  .note.red {
+    background: rgba(255,124,124,0.05);
+    border-color: var(--accent4);
+  }
+  .note.red strong { color: var(--accent4); }
+
+  /* Inline tag */
+  .tag {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 3px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+  .tag-easy { background: rgba(90,228,160,0.12); color: var(--accent2); }
+  .tag-med { background: rgba(232,197,71,0.12); color: var(--accent); }
+  .tag-hard { background: rgba(255,124,124,0.12); color: var(--accent4); }
+
+  @media (max-width: 700px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .container { padding: 32px 16px 60px; }
+    .hero h1 { font-size: 26px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">PY · S046</div>
+  <a href="#s1">Types</a>
+  <a href="#s2">Conditions</a>
+  <a href="#s3">Loops</a>
+  <a href="#s4">Lists</a>
+  <a href="#s5">Sets/Dict</a>
+  <a href="#s6">Functions</a>
+  <a href="#s7">Files</a>
+  <a href="#s8">NumPy</a>
+</nav>
+
+<div class="container">
+
+  <div class="hero">
+    <div class="hero-label">MBA Tech Sem 2 · Python Programming</div>
+    <h1>Quick Reference <span>&amp;</span> Revision Bank</h1>
+    <p>Aditya Mishra · S046 · All 8 topics · syntax patterns · key methods · exam-ready</p>
+    <div class="pill-row">
+      <span class="pill y">8 Topics</span>
+      <span class="pill g">100+ Questions</span>
+      <span class="pill b">All Core Syntax</span>
+      <span class="pill">Easy → Hard</span>
+    </div>
+  </div>
+
+  <!-- ═══ SECTION 1 ═══ -->
+  <div class="section" id="s1">
+    <div class="section-header">
+      <span class="section-num">§01</span>
+      <span class="section-title">Data Types, I/O &amp; Operators</span>
+    </div>
+
+    <div class="block">
+      <div class="block-title">Core Data Types</div>
+      <table>
+        <tr><th>Type</th><th>Example</th><th>Notes</th></tr>
+        <tr><td>int</td><td><code>x = 10</code></td><td>Whole numbers, no size limit</td></tr>
+        <tr><td>float</td><td><code>x = 3.14</code></td><td>Decimal; use for division results</td></tr>
+        <tr><td>str</td><td><code>x = "hi"</code></td><td>Immutable sequence of chars</td></tr>
+        <tr><td>bool</td><td><code>x = True</code></td><td>Subclass of int (True=1, False=0)</td></tr>
+        <tr><td>NoneType</td><td><code>x = None</code></td><td>Represents absence of value</td></tr>
+        <tr><td>complex</td><td><code>x = 3+4j</code></td><td>Real + imaginary; <code>x.real</code>, <code>x.imag</code></td></tr>
+      </table>
+    </div>
+
+    <div class="block">
+      <div class="block-title">Type Casting</div>
+      <pre><span class="fn">int</span>(<span class="st">"42"</span>)        <span class="cm"># → 42</span>
+<span class="fn">float</span>(<span class="st">"3.14"</span>)    <span class="cm"># → 3.14</span>
+<span class="fn">str</span>(<span class="nm">100</span>)         <span class="cm"># → "100"</span>
+<span class="fn">bool</span>(<span class="nm">0</span>)          <span class="cm"># → False  (0, "", [], None → False)</span>
+<span class="fn">type</span>(x)         <span class="cm"># check type</span></pre>
+    </div>
+
+    <div class="block">
+      <div class="block-title">Input / Output</div>
+      <pre>name <span class="op">=</span> <span class="fn">input</span>(<span class="st">"Enter name: "</span>)     <span class="cm"># always returns str</span>
+age  <span class="op">=</span> <span class="fn">int</span>(<span class="fn">input</span>(<span class="st">"Age: "</span>))        <span class="cm"># cast immediately</span>
+
+<span class="fn">print</span>(<span class="st">f"Hello <span class="bl">{name}</span>, age <span class="bl">{age}</span>"</span>)  <span class="cm"># f-string (preferred)</span>
+<span class="fn">print</span>(<span class="st">f"Pi = <span class="bl">{3.14159:.2f}</span>"</span>)       <span class="cm"># 2 decimal places → 3.14</span>
+<span class="fn">print</span>(<span class="st">"a"</span>, <span class="st">"b"</span>, sep<span class="op">=</span><span class="st">"-"</span>, end<span class="op">=</span><span class="st">"!\n"</span>) <span class="cm"># a-b!</span></pre>
+    </div>
+
+    <div class="block">
+      <div class="block-title">Operators — Quick Reference</div>
+      <div class="grid-2">
+        <table>
+          <tr><th>Arithmetic</th><th>Result</th></tr>
+          <tr><td>+  -  *</td><td>add, sub, mul</td></tr>
+          <tr><td>/</td><td>float div (7/2 → 3.5)</td></tr>
+          <tr><td>//</td><td>floor div (7//2 → 3)</td></tr>
+          <tr><td>%</td><td>modulo (7%2 → 1)</td></tr>
+          <tr><td>**</td><td>power (2**3 → 8)</td></tr>
+        </table>
+        <table>
+          <tr><th>Bitwise</th><th>Op</th></tr>
+          <tr><td>&amp;</td><td>AND</td></tr>
+          <tr><td>|</td><td>OR</td></tr>
+          <tr><td>^</td><td>XOR</td></tr>
+          <tr><td>~</td><td>NOT</td></tr>
+          <tr><td>&lt;&lt; / &gt;&gt;</td><td>Left / Right shift</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-title">Math Module Essentials</div>
+      <pre><span class="kw">import</span> math
+math<span class="op">.</span>floor(<span class="nm">3.9</span>)    <span class="cm"># → 3</span>
+math<span class="op">.</span>ceil(<span class="nm">3.1</span>)     <span class="cm"># → 4</span>
+math<span class="op">.</span>sqrt(<span class="nm">16</span>)     <span class="cm"># → 4.0</span>
+math<span class="op">.</span>pi            <span class="cm"># → 3.14159...</span>
+<span class="fn">abs</span>(<span class="op">-</span><span class="nm">5</span>)           <span class="cm"># → 5  (built-in, no import needed)</span>
+<span class="fn">round</span>(<span class="nm">3.14159</span>, <span class="nm">2</span>) <span class="cm"># → 3.14</span></pre>
+    </div>
+
+    <div class="note"><strong>XOR Swap:</strong> <code>a^=b; b^=a; a^=b</code> — swaps without temp variable.</div>
+    <div class="note green"><strong>Discriminant:</strong> D = b²−4ac → D&gt;0: two real roots, D=0: one root, D&lt;0: complex roots.</div>
+  </div>
+
+  <!-- ═══ SECTION 2 ═══ -->
+  <div class="section" id="s2">
+    <div class="section-header">
+      <span class="section-num">§02</span>
+      <span class="section-title">Conditional Statements &amp; Strings</span>
+    </div>
+
+    <div class="block">
+      <div class="block-title">if / elif / else</div>
+      <pre><span class="kw">if</span> condition:
+    ...
+<span class="kw">elif</span> other:
+    ...
+<span class="kw">else</span>:
+    ...
+
+<span class="cm"># Ternary (one-liner)</span>
+result <span class="op">=</span> <span class="st">"even"</span> <span class="kw">if</span> n <span class="op">%</span> <span class="nm">2</span> <span class="op">==</span> <span class="nm">0</span> <span class="kw">else</span> <span class="st">"odd"</span></pre>
+    </div>
+
+    <div class="block">
+      <div class="block-title">Logical Operators</div>
+      <table>
+        <tr><th>Operator</th><th>Example</th><th>Meaning</th></tr>
+        <tr><td>and</td><td><code>a &gt; 0 and b &gt; 0</code></td><td>Both must be True</td></tr>
+        <tr><td>or</td><td><code>a == 0 or b == 0</code></td><td>At least one True</td></tr>
+        <tr><td>not</td><td><code>not (a &gt; 0)</code></td><td>Inverts boolean</td></tr>
+        <tr><td>in</td><td><code>'a' in "apple"</code></td><td>Membership test</td></tr>
+        <tr><td>is</td><td><code>x is None</code></td><td>Identity (not equality)</td></tr>
+      </table>
+    </div>
+
+    <div class="block">
+      <div class="block-title">Key String Operations</div>
+      <pre>s <span class="op">=</span> <span class="st">"Hello World"</span>
+
+<span class="cm"># Slicing   s[start:stop:step]</span>
+s[<span class="nm">0</span>]         <span class="cm"># 'H'</span>
+s[<span class="op">-</span><span class="nm">1</span>]        <span class="cm"># 'd'</span>
+s[<span class="nm">0</span>:<span class="nm">5</span>]       <span class="cm"># 'Hello'</span>
+s[::<span class="op">-</span><span class="nm">1</span>]      <span class="cm"># 'dlroW olleH'  ← reverse</span>
+s[<span class="nm">6</span>:]        <span class="cm"># 'World'</span></pre>
+    </div>
+
+    <div class="block">
+      <div class="block-title">String Methods Table</div>
+      <table>
+        <tr><th>Method</th><th>Example → Result</th></tr>
+        <tr><td>.upper()</td><td><code>"hi".upper() → "HI"</code></td></tr>
+        <tr><td>.lower()</td><td><code>"HI".lower() → "hi"</code></td></tr>
+        <tr><td>.title()</td><td><code>"hi world".title() → "Hi World"</code></td></tr>
+        <tr><td>.strip()</td><td><code>"  hi  ".strip() → "hi"</code></td></tr>
+        <tr><td>.replace(a,b)</td><td><code>"abc".replace("a","x") → "xbc"</code></td></tr>
+        <tr><td>.find(s)</td><td><code>"hello".find("ll") → 2</code> (−1 if not found)</td></tr>
+        <tr><td>.count(s)</td><td><code>"banana".count("a") → 3</code></td></tr>
+        <tr><td>.split(d)</td><td><code>"a,b".split(",") → ["a","b"]</code></td></tr>
+        <tr><td>.join(lst)</td><td><code>"-".join(["a","b"]) → "a-b"</code></td></tr>
+        <tr><td>.startswith()</td><td><code>"hi".startswith("h") → True</code></td></tr>
+        <tr><td>.endswith()</td><td><code>"hi".endswith("i") → True</code></td></tr>
+        <tr><td>.isdigit()</td><td><code>"123".isdigit() → True</code></td></tr>
+        <tr><td>.isalpha()</td><td><code>"abc".isalpha() → True</code></td></tr>
+      </table>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Palindrome Check</div>
+        <pre style="padding:10px;"><span class="cm"># Clean then compare</span>
+s <span class="op">=</span> s<span class="op">.</span>lower()<span class="op">.</span>replace(<span class="st">' '</span>,<span class="st">''</span>)
+<span class="fn">print</span>(s <span class="op">==</span> s[::<span class="op">-</span><span class="nm">1</span>])</pre>
+      </div>
+      <div class="card">
+        <div class="card-title">Anagram Check</div>
+        <pre style="padding:10px;"><span class="cm"># Sort both, compare</span>
+<span class="fn">sorted</span>(s1<span class="op">.</span>lower()) <span class="op">==</span>
+<span class="fn">sorted</span>(s2<span class="op">.</span>lower())</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SECTION 3 ═══ -->
+  <div class="section" id="s3">
+    <div class="section-header">
+      <span class="section-num">§03</span>
+      <span class="section-title">Loops, Patterns &amp; String Functions</span>
+    </div>
+
+    <div class="block">
+      <div class="block-title">Loop Syntax</div>
+      <div class="grid-2">
+        <pre><span class="cm"># for loop</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="nm">1</span>, <span class="nm">6</span>):     <span class="cm"># 1..5</span>
+    <span class="fn">print</span>(i)
+
+<span class="kw">for</span> i, v <span class="kw">in</span> <span class="fn">enumerate</span>(lst):
+    <span class="fn">print</span>(i, v)</pre>
+        <pre><span class="cm"># while loop</span>
+i <span class="op">=</span> <span class="nm">0</span>
+<span class="kw">while</span> i <span class="op">&lt;</span> <span class="nm">5</span>:
+    <span class="fn">print</span>(i)
+    i <span class="op">+=</span> <span class="nm">1</span>
+
+<span class="cm"># while True + break</span>
+<span class="kw">while</span> <span class="bl">True</span>:
+    <span class="kw">if</span> condition: <span class="kw">break</span></pre>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-title">break / continue / pass</div>
+      <table>
+        <tr><th>Keyword</th><th>Effect</th><th>When to use</th></tr>
+        <tr><td>break</td><td>Exits loop immediately</td><td>Found what you needed; stop early</td></tr>
+        <tr><td>continue</td><td>Skips rest of current iteration</td><td>Skip multiples, skip invalid input</td></tr>
+        <tr><td>pass</td><td>No-op placeholder</td><td>Empty block, intentional do-nothing</td></tr>
+      </table>
+    </div>
+
+    <div class="block">
+      <div class="block-title">range() Patterns</div>
+      <table>
+        <tr><th>Call</th><th>Produces</th></tr>
+        <tr><td><code>range(5)</code></td><td>0, 1, 2, 3, 4</td></tr>
+        <tr><td><code>range(1, 6)</code></td><td>1, 2, 3, 4, 5</td></tr>
+        <tr><td><code>range(1, 10, 2)</code></td><td>1, 3, 5, 7, 9 (step=2)</td></tr>
+        <tr><td><code>range(10, 0, -1)</code></td><td>10, 9, 8, … 1 (countdown)</td></tr>
+      </table>
+    </div>
+
+    <div class="block">
+      <div class="block-title">Pattern Printing — Formulas</div>
+      <table>
+        <tr><th>Pattern</th><th>Spaces</th><th>Stars</th></tr>
+        <tr><td>Right triangle</td><td>0</td><td><code>i</code> (row i, 1-indexed)</td></tr>
+        <tr><td>Pyramid (centred)</td><td><code>N - i</code></td><td><code>2*i - 1</code></td></tr>
+        <tr><td>Hollow rectangle</td><td>—</td><td>Border only: <code>i==0 or i==N-1 or j==0 or j==M-1</code></td></tr>
+        <tr><td>Diamond</td><td>—</td><td>Upper = pyramid, lower = inverted pyramid</td></tr>
+      </table>
+      <pre><span class="cm"># Pyramid template</span>
+N <span class="op">=</span> <span class="nm">5</span>
+<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="nm">1</span>, N<span class="op">+</span><span class="nm">1</span>):
+    <span class="fn">print</span>(<span class="st">" "</span> <span class="op">*</span> (N<span class="op">-</span>i) <span class="op">+</span> <span class="st">"* "</span> <span class="op">*</span> i)</pre>
+    </div>
+
+    <div class="note"><strong>Floyd's Triangle:</strong> Use a running counter across outer loop iterations, inner loop prints current row count.</div>
+  </div>
+
+  <!-- ═══ SECTION 4 ═══ -->
+  <div class="section" id="s4">
+    <div class="section-header">
+      <span class="section-num">§04</span>
+      <span class="section-title">Lists &amp; Tuples</span>
+    </div>
+
+    <div class="block">
+      <div class="block-title">List Basics</div>
+      <pre>lst <span class="op">=</span> [<span class="nm">1</span>, <span class="nm">2</span>, <span class="nm">3</span>, <span class="nm">4</span>, <span class="nm">5</span>]
+lst[<span class="nm">0</span>]        <span class="cm"># 1       (indexing)</span>
+lst[<span class="op">-</span><span class="nm">1</span>]       <span class="cm"># 5       (last)</span>
+lst[<span class="nm">1</span>:<span class="nm">4</span>]      <span class="cm"># [2,3,4] (slicing)</span>
+lst[::<span class="op">-</span><span class="nm">1</span>]     <span class="cm"># [5,4,3,2,1] (reverse)</span>
+lst[<span class="op">-</span><span class="nm">2</span>:]      <span class="cm"># [4,5]</span>
+
+<span class="cm"># Right-rotate by K</span>
+rotated <span class="op">=</span> lst[<span class="op">-</span>k:] <span class="op">+</span> lst[:<span class="op">-</span>k]</pre>
+    </div>
+
+    <div class="block">
+      <div class="block-title">List Methods</div>
+      <table>
+        <tr><th>Method</th><th>Effect</th></tr>
+        <tr><td><code>.append(x)</code></td><td>Add x at end</td></tr>
+        <tr><td><code>.insert(i, x)</code></td><td>Insert x at index i</td></tr>
+        <tr><td><code>.remove(x)</code></td><td>Remove first occurrence of x</td></tr>
+        <tr><td><code>.pop(i)</code></td><td>Remove &amp; return item at index i (default: last)</td></tr>
+        <tr><td><code>.reverse()</code></td><td>Reverse in-place</td></tr>
+        <tr><td><code>.sort()</code></td><td>Sort in-place (ascending)</td></tr>
+        <tr><td><code>.sort(reverse=True)</code></td><td>Sort descending in-place</td></tr>
+        <tr><td><code>.count(x)</code></td><td>Count occurrences of x</td></tr>
+        <tr><td><code>.index(x)</code></td><td>First index of x</td></tr>
+        <tr><td><code>.extend(lst2)</code></td><td>Append all items from lst2</td></tr>
+      </table>
+    </div>
+
+    <div class="block">
+      <div class="block-title">List Comprehension</div>
+      <pre><span class="cm"># Pattern: [expression for var in iterable if condition]</span>
+squares  <span class="op">=</span> [x<span class="op">**</span><span class="nm">2</span> <span class="kw">for</span> x <span class="kw">in</span> <span class="fn">range</span>(<span class="nm">1</span>,<span class="nm">11</span>)]
+evens    <span class="op">=</span> [x <span class="kw">for</span> x <span class="kw">in</span> lst <span class="kw">if</span> x <span class="op">%</span> <span class="nm">2</span> <span class="op">==</span> <span class="nm">0</span>]
+long_w   <span class="op">=</span> [w <span class="kw">for</span> w <span class="kw">in</span> words <span class="kw">if</span> <span class="fn">len</span>(w) <span class="op">&gt;</span> <span class="nm">4</span>]</pre>
+    </div>
+
+    <div class="block">
+      <div class="block-title">Tuples</div>
+      <pre>t <span class="op">=</span> (<span class="nm">1</span>, <span class="nm">2</span>, <span class="nm">3</span>)         <span class="cm"># immutable</span>
+a, b, c <span class="op">=</span> t            <span class="cm"># unpacking</span>
+t[<span class="nm">1</span>]                   <span class="cm"># 2</span>
+<span class="fn">len</span>(t), <span class="fn">min</span>(t), <span class="fn">max</span>(t) <span class="cm"># standard functions work</span>
+
+<span class="cm"># Sort list of tuples: name + marks</span>
+<span class="fn">sorted</span>(data, key<span class="op">=</span><span class="kw">lambda</span> t: (<span class="op">-</span>t[<span class="nm">1</span>], t[<span class="nm">0</span>]))
+<span class="cm"># sorts by marks descending, then name ascending</span></pre>
+    </div>
+
+    <div class="note"><strong>No-sort 2nd largest:</strong> One-pass — track first and second largest with two variables.</div>
+    <div class="note green"><strong>Flatten nested list:</strong> Recursion — check <code>isinstance(item, list)</code>; recurse or append.</div>
+  </div>
+
+  <!-- ═══ SECTION 5 ═══ -->
+  <div class="section" id="s5">
+    <div class="section-header">
+      <span class="section-num">§05</span>
+      <span class="section-title">Sets &amp; Dictionaries</span>
+    </div>
+
+    <div class="block">
+      <div class="block-title">Set Operations</div>
+      <pre>A <span class="op">=</span> {<span class="nm">1</span>,<span class="nm">2</span>,<span class="nm">3</span>};  B <span class="op">=</span> {<span class="nm">2</span>,<span class="nm">3</span>,<span class="nm">4</span>}
+A <span class="op">|</span> B        <span class="cm"># Union        {1,2,3,4}</span>
+A <span class="op">&amp;</span> B        <span class="cm"># Intersection {2,3}</span>
+A <span class="op">-</span> B        <span class="cm"># Difference   {1}</span>
+A <span class="op">^</span> B        <span class="cm"># Symmetric diff {1,4}</span>
+A<span class="op">.</span>issubset(B)  <span class="cm"># bool</span></pre>
+    </div>
+
+    <div class="block">
+      <div class="block-title">Dictionary Patterns</div>
+      <pre>d <span class="op">=</span> {<span class="st">"a"</span>: <span class="nm">1</span>, <span class="st">"b"</span>: <span class="nm">2</span>}
+
+<span class="cm"># Access</span>
+d[<span class="st">"a"</span>]                <span class="cm"># → 1  (KeyError if missing)</span>
+d<span class="op">.</span>get(<span class="st">"z"</span>, <span class="nm">0</span>)          <span class="cm"># → 0  (safe, default=0)</span>
+
+<span class="cm"># Modify</span>
+d[<span class="st">"c"</span>] <span class="op">=</span> <span class="nm">3</span>             <span class="cm"># add/update</span>
+<span class="kw">del</span> d[<span class="st">"a"</span>]             <span class="cm"># delete key</span>
+d<span class="op">.</span>pop(<span class="st">"b"</span>, <span class="bl">None</span>)       <span class="cm"># remove + return (safe)</span>
+
+<span class="cm"># Iterate</span>
+<span class="kw">for</span> k, v <span class="kw">in</span> d<span class="op">.</span>items():  <span class="fn">print</span>(k, v)
+<span class="kw">for</span> k <span class="kw">in</span> d<span class="op">.</span>keys():     ...
+<span class="kw">for</span> v <span class="kw">in</span> d<span class="op">.</span>values():   ...</pre>
+    </div>
+
+    <div class="block">
+      <div class="block-title">Common Dict Recipes</div>
+      <pre><span class="cm"># Frequency counter</span>
+freq <span class="op">=</span> {}
+<span class="kw">for</span> w <span class="kw">in</span> words:
+    freq[w] <span class="op">=</span> freq<span class="op">.</span>get(w, <span class="nm">0</span>) <span class="op">+</span> <span class="nm">1</span>
+
+<span class="cm"># Group by key</span>
+d<span class="op">.</span>setdefault(key, [])<span class="op">.</span>append(val)
+
+<span class="cm"># Sort by value (descending)</span>
+<span class="fn">sorted</span>(freq<span class="op">.</span>items(), key<span class="op">=</span><span class="kw">lambda</span> x: x[<span class="nm">1</span>], reverse<span class="op">=</span><span class="bl">True</span>)
+
+<span class="cm"># Dict comprehension</span>
+sq <span class="op">=</span> {n: n<span class="op">**</span><span class="nm">2</span> <span class="kw">for</span> n <span class="kw">in</span> <span class="fn">range</span>(<span class="nm">1</span>,<span class="nm">11</span>)}
+z  <span class="op">=</span> <span class="fn">dict</span>(<span class="fn">zip</span>(keys, vals))   <span class="cm"># from two lists</span>
+
+<span class="cm"># Invert dict</span>
+inv <span class="op">=</span> {v: k <span class="kw">for</span> k, v <span class="kw">in</span> d<span class="op">.</span>items()}
+
+<span class="cm"># Anagram grouping key</span>
+<span class="fn">tuple</span>(<span class="fn">sorted</span>(word))  <span class="cm"># same key for all anagrams</span></pre>
+    </div>
+  </div>
+
+  <!-- ═══ SECTION 6 ═══ -->
+  <div class="section" id="s6">
+    <div class="section-header">
+      <span class="section-num">§06</span>
+      <span class="section-title">Functions — UDF, Lambda, Recursion</span>
+    </div>
+
+    <div class="block">
+      <div class="block-title">Function Syntax Variants</div>
+      <pre><span class="cm"># 1. Basic UDF</span>
+<span class="kw">def</span> <span class="fn">greet</span>(name):
+    <span class="kw">return</span> <span class="st">f"Hello, <span class="bl">{name}</span>"</span>
+
+<span class="cm"># 2. Default argument</span>
+<span class="kw">def</span> <span class="fn">area</span>(a, b<span class="op">=</span><span class="bl">None</span>):
+    <span class="kw">return</span> math<span class="op">.</span>pi<span class="op">*</span>a<span class="op">**</span><span class="nm">2</span> <span class="kw">if</span> b <span class="kw">is</span> <span class="bl">None</span> <span class="kw">else</span> <span class="nm">0.5</span><span class="op">*</span>a<span class="op">*</span>b
+
+<span class="cm"># 3. *args — variable positional</span>
+<span class="kw">def</span> <span class="fn">find_max</span>(<span class="op">*</span>args):
+    <span class="kw">return</span> <span class="fn">max</span>(args)
+
+<span class="cm"># 4. **kwargs — variable keyword</span>
+<span class="kw">def</span> <span class="fn">report</span>(<span class="op">**</span>kwargs):
+    <span class="kw">for</span> k, v <span class="kw">in</span> kwargs<span class="op">.</span>items():
+        <span class="fn">print</span>(<span class="st">f"<span class="bl">{k}</span>: <span class="bl">{v}</span>"</span>)</pre>
+    </div>
+
+    <div class="block">
+      <div class="block-title">Recursion — Base Cases</div>
+      <div class="grid-2">
+        <pre><span class="cm"># Factorial</span>
+<span class="kw">def</span> <span class="fn">factorial</span>(n):
+    <span class="kw">if</span> n <span class="op">==</span> <span class="nm">0</span>: <span class="kw">return</span> <span class="nm">1</span>
+    <span class="kw">return</span> n <span class="op">*</span> <span class="fn">factorial</span>(n<span class="op">-</span><span class="nm">1</span>)
+
+<span class="cm"># Sum of digits</span>
+<span class="kw">def</span> <span class="fn">sum_dig</span>(n):
+    <span class="kw">if</span> n <span class="op">&lt;</span> <span class="nm">10</span>: <span class="kw">return</span> n
+    <span class="kw">return</span> n<span class="op">%</span><span class="nm">10</span> <span class="op">+</span> <span class="fn">sum_dig</span>(n<span class="op">//</span><span class="nm">10</span>)</pre>
+        <pre><span class="cm"># Fibonacci</span>
+<span class="kw">def</span> <span class="fn">fib</span>(n):
+    <span class="kw">if</span> n <span class="op">&lt;=</span> <span class="nm">1</span>: <span class="kw">return</span> n
+    <span class="kw">return</span> <span class="fn">fib</span>(n<span class="op">-</span><span class="nm">1</span>) <span class="op">+</span> <span class="fn">fib</span>(n<span class="op">-</span><span class="nm">2</span>)
+
+<span class="cm"># Power</span>
+<span class="kw">def</span> <span class="fn">power</span>(b, e):
+    <span class="kw">if</span> e <span class="op">==</span> <span class="nm">0</span>: <span class="kw">return</span> <span class="nm">1</span>
+    <span class="kw">return</span> b <span class="op">*</span> <span class="fn">power</span>(b, e<span class="op">-</span><span class="nm">1</span>)</pre>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-title">Lambda · map · filter</div>
+      <pre><span class="cm"># lambda: anonymous one-liner</span>
+sq <span class="op">=</span> <span class="kw">lambda</span> x: x<span class="op">**</span><span class="nm">2</span>
+add <span class="op">=</span> <span class="kw">lambda</span> a, b: a <span class="op">+</span> b
+
+<span class="cm"># map: apply function to every element</span>
+<span class="fn">list</span>(<span class="fn">map</span>(<span class="kw">lambda</span> x: x<span class="op">**</span><span class="nm">2</span>, [<span class="nm">1</span>,<span class="nm">2</span>,<span class="nm">3</span>]))      <span class="cm"># [1,4,9]</span>
+<span class="fn">list</span>(<span class="fn">map</span>(<span class="kw">lambda</span> c: c<span class="op">*</span><span class="nm">9</span><span class="op">/</span><span class="nm">5</span><span class="op">+</span><span class="nm">32</span>, celsius))   <span class="cm"># C→F</span>
+
+<span class="cm"># filter: keep elements where function is True</span>
+<span class="fn">list</span>(<span class="fn">filter</span>(<span class="kw">lambda</span> x: x<span class="op">%</span><span class="nm">2</span><span class="op">==</span><span class="nm">0</span>, nums))     <span class="cm"># evens only</span>
+<span class="fn">list</span>(<span class="fn">filter</span>(<span class="kw">lambda</span> s: s<span class="op">==</span>s[::<span class="op">-</span><span class="nm">1</span>], words)) <span class="cm"># palindromes</span></pre>
+    </div>
+
+    <div class="block">
+      <div class="block-title">Closure · Memoization · Decorator</div>
+      <pre><span class="cm"># Closure</span>
+<span class="kw">def</span> <span class="fn">make_counter</span>():
+    count <span class="op">=</span> <span class="nm">0</span>
+    <span class="kw">def</span> <span class="fn">increment</span>():
+        <span class="kw">nonlocal</span> count
+        count <span class="op">+=</span> <span class="nm">1</span>
+        <span class="fn">print</span>(count)
+    <span class="kw">return</span> increment
+
+<span class="cm"># Memoization</span>
+<span class="kw">def</span> <span class="fn">memoize</span>(f):
+    cache <span class="op">=</span> {}
+    <span class="kw">def</span> <span class="fn">wrapper</span>(n):
+        <span class="kw">if</span> n <span class="kw">not</span> <span class="kw">in</span> cache:
+            cache[n] <span class="op">=</span> f(n)
+        <span class="kw">return</span> cache[n]
+    <span class="kw">return</span> wrapper
+
+<span class="cm"># Decorator (@timer)</span>
+<span class="kw">import</span> time
+<span class="kw">def</span> <span class="fn">timer</span>(f):
+    <span class="kw">def</span> <span class="fn">wrapper</span>(<span class="op">*</span>args):
+        start <span class="op">=</span> time<span class="op">.</span>time()
+        result <span class="op">=</span> f(<span class="op">*</span>args)
+        <span class="fn">print</span>(<span class="st">f"<span class="bl">{time.time()-start:.4f}</span>s"</span>)
+        <span class="kw">return</span> result
+    <span class="kw">return</span> wrapper</pre>
+    </div>
+  </div>
+
+  <!-- ═══ SECTION 7 ═══ -->
+  <div class="section" id="s7">
+    <div class="section-header">
+      <span class="section-num">§07</span>
+      <span class="section-title">File Handling</span>
+    </div>
+
+    <div class="block">
+      <div class="block-title">File Modes</div>
+      <table>
+        <tr><th>Mode</th><th>Meaning</th><th>Creates if missing?</th></tr>
+        <tr><td>"r"</td><td>Read (default)</td><td>No — FileNotFoundError</td></tr>
+        <tr><td>"w"</td><td>Write (overwrites)</td><td>Yes</td></tr>
+        <tr><td>"a"</td><td>Append</td><td>Yes</td></tr>
+        <tr><td>"r+"</td><td>Read + Write</td><td>No</td></tr>
+        <tr><td>"rb" / "wb"</td><td>Binary read/write</td><td>—</td></tr>
+      </table>
+    </div>
+
+    <div class="block">
+      <div class="block-title">Core Patterns</div>
+      <pre><span class="cm"># Write</span>
+<span class="kw">with</span> <span class="fn">open</span>(<span class="st">"f.txt"</span>, <span class="st">"w"</span>) <span class="kw">as</span> f:
+    f<span class="op">.</span>write(<span class="st">"hello\n"</span>)
+    f<span class="op">.</span>writelines([<span class="st">"a\n"</span>, <span class="st">"b\n"</span>])
+
+<span class="cm"># Read</span>
+<span class="kw">with</span> <span class="fn">open</span>(<span class="st">"f.txt"</span>, <span class="st">"r"</span>) <span class="kw">as</span> f:
+    content <span class="op">=</span> f<span class="op">.</span>read()          <span class="cm"># whole file → str</span>
+    lines   <span class="op">=</span> f<span class="op">.</span>readlines()     <span class="cm"># → list of lines</span>
+    line    <span class="op">=</span> f<span class="op">.</span>readline()      <span class="cm"># → one line</span>
+
+<span class="cm"># Iterate line by line (memory efficient)</span>
+<span class="kw">with</span> <span class="fn">open</span>(<span class="st">"f.txt"</span>) <span class="kw">as</span> f:
+    <span class="kw">for</span> line <span class="kw">in</span> f:
+        <span class="fn">print</span>(line<span class="op">.</span>strip())
+
+<span class="cm"># Append</span>
+<span class="kw">with</span> <span class="fn">open</span>(<span class="st">"f.txt"</span>, <span class="st">"a"</span>) <span class="kw">as</span> f:
+    f<span class="op">.</span>write(<span class="st">"new line\n"</span>)</pre>
+    </div>
+
+    <div class="block">
+      <div class="block-title">seek() &amp; tell()</div>
+      <pre>f<span class="op">.</span>tell()       <span class="cm"># current position (bytes from start)</span>
+f<span class="op">.</span>seek(<span class="nm">0</span>)      <span class="cm"># go to start</span>
+f<span class="op">.</span>seek(<span class="nm">0</span>, <span class="nm">2</span>)   <span class="cm"># go to end  (2 = SEEK_END)</span>
+f<span class="op">.</span>seek(<span class="nm">5</span>)      <span class="cm"># jump to byte 5</span></pre>
+    </div>
+
+    <div class="block">
+      <div class="block-title">Delete a specific line</div>
+      <pre><span class="kw">with</span> <span class="fn">open</span>(<span class="st">"f.txt"</span>) <span class="kw">as</span> f:
+    lines <span class="op">=</span> f<span class="op">.</span>readlines()
+lines<span class="op">.</span>pop(n<span class="op">-</span><span class="nm">1</span>)               <span class="cm"># delete line n (1-indexed)</span>
+<span class="kw">with</span> <span class="fn">open</span>(<span class="st">"f.txt"</span>, <span class="st">"w"</span>) <span class="kw">as</span> f:
+    f<span class="op">.</span>writelines(lines)</pre>
+    </div>
+
+    <div class="note"><strong>Always use <code>with open(...)</code></strong> — auto-closes file even on error. Never use <code>f.close()</code> manually in exam code.</div>
+  </div>
+
+  <!-- ═══ SECTION 8 ═══ -->
+  <div class="section" id="s8">
+    <div class="section-header">
+      <span class="section-num">§08</span>
+      <span class="section-title">NumPy — Arrays &amp; Matrix Ops</span>
+    </div>
+
+    <div class="block">
+      <div class="block-title">Array Creation</div>
+      <pre><span class="kw">import</span> numpy <span class="kw">as</span> np
+
+np<span class="op">.</span>array([<span class="nm">1</span>,<span class="nm">2</span>,<span class="nm">3</span>])               <span class="cm"># from list</span>
+np<span class="op">.</span>zeros((<span class="nm">3</span>,<span class="nm">3</span>))                 <span class="cm"># 3x3 of 0s</span>
+np<span class="op">.</span>ones((<span class="nm">2</span>,<span class="nm">4</span>))                  <span class="cm"># 2x4 of 1s</span>
+np<span class="op">.</span>eye(<span class="nm">5</span>)                       <span class="cm"># 5x5 identity</span>
+np<span class="op">.</span>arange(<span class="nm">0</span>, <span class="nm">50</span>, <span class="nm">3</span>)             <span class="cm"># 0,3,6,...,48</span>
+np<span class="op">.</span>linspace(<span class="nm">0</span>, <span class="nm">1</span>, <span class="nm">10</span>)           <span class="cm"># 10 evenly spaced</span>
+np<span class="op">.</span>random<span class="op">.</span>randint(<span class="nm">1</span>, <span class="nm">101</span>, (<span class="nm">4</span>,<span class="nm">4</span>)) <span class="cm"># 4x4 random ints</span>
+np<span class="op">.</span>random<span class="op">.</span>rand(<span class="nm">3</span>, <span class="nm">4</span>)            <span class="cm"># 3x4 random floats [0,1)</span></pre>
+    </div>
+
+    <div class="block">
+      <div class="block-title">Array Attributes &amp; Reshaping</div>
+      <table>
+        <tr><th>Attribute/Method</th><th>Returns</th></tr>
+        <tr><td><code>arr.shape</code></td><td>Tuple of dimensions e.g. (3,4)</td></tr>
+        <tr><td><code>arr.size</code></td><td>Total elements</td></tr>
+        <tr><td><code>arr.ndim</code></td><td>Number of dimensions</td></tr>
+        <tr><td><code>arr.dtype</code></td><td>Data type (int32, float64…)</td></tr>
+        <tr><td><code>arr.itemsize</code></td><td>Bytes per element</td></tr>
+        <tr><td><code>arr.nbytes</code></td><td>Total bytes (size × itemsize)</td></tr>
+        <tr><td><code>arr.reshape(r,c)</code></td><td>New shape (same total elements)</td></tr>
+        <tr><td><code>arr.flatten()</code></td><td>1D copy</td></tr>
+        <tr><td><code>arr.T</code></td><td>Transpose</td></tr>
+      </table>
+    </div>
+
+    <div class="block">
+      <div class="block-title">Slicing 2D Arrays</div>
+      <pre>A <span class="op">=</span> np<span class="op">.</span>random<span class="op">.</span>randint(<span class="nm">1</span>,<span class="nm">10</span>,(<span class="nm">4</span>,<span class="nm">4</span>))
+A[<span class="nm">0</span>]          <span class="cm"># first row</span>
+A[<span class="op">-</span><span class="nm">1</span>]         <span class="cm"># last row</span>
+A[:, <span class="nm">0</span>]       <span class="cm"># first column</span>
+A[:, <span class="op">-</span><span class="nm">1</span>]      <span class="cm"># last column</span>
+A[<span class="nm">0</span>:<span class="nm">2</span>, <span class="nm">2</span>:<span class="nm">4</span>]  <span class="cm"># top-right 2x2</span>
+A[<span class="nm">1</span>, <span class="nm">2</span>]       <span class="cm"># element at row1, col2</span></pre>
+    </div>
+
+    <div class="block">
+      <div class="block-title">Aggregations &amp; Sorting</div>
+      <pre>np<span class="op">.</span>sum(A), np<span class="op">.</span>mean(A), np<span class="op">.</span>min(A), np<span class="op">.</span>max(A)
+np<span class="op">.</span>sum(A, axis<span class="op">=</span><span class="nm">0</span>)  <span class="cm"># column-wise sums</span>
+np<span class="op">.</span>sum(A, axis<span class="op">=</span><span class="nm">1</span>)  <span class="cm"># row-wise sums</span>
+
+np<span class="op">.</span>sort(A, axis<span class="op">=</span><span class="nm">0</span>)  <span class="cm"># sort columns</span>
+np<span class="op">.</span>sort(A, axis<span class="op">=</span><span class="nm">1</span>)  <span class="cm"># sort rows</span>
+np<span class="op">.</span>sort(A<span class="op">.</span>flatten()) <span class="cm"># sort flat</span>
+
+<span class="cm"># Find index</span>
+np<span class="op">.</span>where(A <span class="op">==</span> <span class="nm">21</span>)   <span class="cm"># returns tuple of indices</span></pre>
+    </div>
+
+    <div class="block">
+      <div class="block-title">Linear Algebra</div>
+      <pre><span class="cm"># Matrix multiply (dot product)</span>
+A @ B                      <span class="cm"># same as np.matmul(A, B)</span>
+np<span class="op">.</span>dot(v1, v2)             <span class="cm"># 1D dot product</span>
+np<span class="op">.</span>cross(v1, v2)           <span class="cm"># cross product</span>
+np<span class="op">.</span>linalg<span class="op">.</span>norm(v)          <span class="cm"># magnitude ||v||</span>
+
+np<span class="op">.</span>linalg<span class="op">.</span>det(A)           <span class="cm"># determinant</span>
+np<span class="op">.</span>linalg<span class="op">.</span>inv(A)           <span class="cm"># inverse</span>
+np<span class="op">.</span>linalg<span class="op">.</span>solve(A, b)      <span class="cm"># solve Ax = b</span>
+
+<span class="cm"># Verify: A @ np.linalg.inv(A) ≈ identity</span>
+<span class="cm"># Verify: A @ x ≈ b</span></pre>
+    </div>
+
+    <div class="block">
+      <div class="block-title">Boolean Indexing &amp; Broadcasting</div>
+      <pre><span class="cm"># Boolean masking</span>
+arr[arr <span class="op">&lt;</span> <span class="nm">30</span>] <span class="op">=</span> <span class="nm">0</span>    <span class="cm"># replace values below 30</span>
+arr[arr <span class="op">&gt;</span> <span class="nm">70</span>] <span class="op">=</span> <span class="nm">100</span>  <span class="cm"># replace values above 70</span>
+arr[arr <span class="op">%</span> <span class="nm">2</span> <span class="op">==</span> <span class="nm">0</span>]   <span class="cm"># get even elements</span>
+
+<span class="cm"># Broadcasting: no loop needed</span>
+A  <span class="op">=</span> np<span class="op">.</span>ones((<span class="nm">4</span>,<span class="nm">3</span>))   <span class="cm"># shape (4,3)</span>
+v  <span class="op">=</span> np<span class="op">.</span>array([<span class="nm">1</span>,<span class="nm">2</span>,<span class="nm">3</span>]) <span class="cm"># shape (3,)</span>
+A <span class="op">+</span> v               <span class="cm"># v broadcast to (4,3)</span></pre>
+    </div>
+
+    <div class="note"><strong>axis=0</strong> → operates down rows (column-wise result). <strong>axis=1</strong> → operates across columns (row-wise result).</div>
+  </div>
+
+  <!-- ═══ EXAM QUICK TIPS ═══ -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">✦</span>
+      <span class="section-title">Exam Quick-Fire Reference</span>
+    </div>
+
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-title">Edge Cases to Handle</div>
+        <pre style="font-size:11.5px;padding:10px;"><span class="cm"># Division by zero</span>
+<span class="kw">if</span> b <span class="op">!=</span> <span class="nm">0</span>: a <span class="op">/</span> b
+
+<span class="cm"># Empty list</span>
+<span class="kw">if</span> <span class="kw">not</span> lst: ...
+
+<span class="cm"># n=0 in recursion</span>
+<span class="kw">if</span> n <span class="op">==</span> <span class="nm">0</span>: <span class="kw">return</span> base</pre>
+      </div>
+      <div class="card">
+        <div class="card-title">Heron's Formula</div>
+        <pre style="font-size:11.5px;padding:10px;">s <span class="op">=</span> (a<span class="op">+</span>b<span class="op">+</span>c) <span class="op">/</span> <span class="nm">2</span>
+area <span class="op">=</span> math<span class="op">.</span>sqrt(
+  s<span class="op">*</span>(s<span class="op">-</span>a)<span class="op">*</span>(s<span class="op">-</span>b)<span class="op">*</span>(s<span class="op">-</span>c)
+)
+<span class="cm"># Valid if: a+b>c etc.</span></pre>
+      </div>
+      <div class="card">
+        <div class="card-title">Leap Year Logic</div>
+        <pre style="font-size:11.5px;padding:10px;">(y <span class="op">%</span> <span class="nm">4</span> <span class="op">==</span> <span class="nm">0</span>
+ <span class="kw">and</span> y <span class="op">%</span> <span class="nm">100</span> <span class="op">!=</span> <span class="nm">0</span>)
+<span class="kw">or</span>
+(y <span class="op">%</span> <span class="nm">400</span> <span class="op">==</span> <span class="nm">0</span>)</pre>
+      </div>
+      <div class="card">
+        <div class="card-title">Simple &amp; Compound Interest</div>
+        <pre style="font-size:11.5px;padding:10px;">SI <span class="op">=</span> P<span class="op">*</span>R<span class="op">*</span>T <span class="op">/</span> <span class="nm">100</span>
+A  <span class="op">=</span> P<span class="op">*</span>(<span class="nm">1</span> <span class="op">+</span> r<span class="op">/</span>n)<span class="op">**</span>(n<span class="op">*</span>t)
+CI <span class="op">=</span> A <span class="op">-</span> P</pre>
+      </div>
+      <div class="card">
+        <div class="card-title">Run-Length Encoding</div>
+        <pre style="font-size:11.5px;padding:10px;"><span class="cm"># "aaabbc" → "a3b2c1"</span>
+res, i <span class="op">=</span> <span class="st">""</span>, <span class="nm">0</span>
+<span class="kw">while</span> i <span class="op">&lt;</span> <span class="fn">len</span>(s):
+    c, cnt <span class="op">=</span> s[i], <span class="nm">1</span>
+    <span class="kw">while</span> i<span class="op">+</span>cnt <span class="op">&lt;</span> <span class="fn">len</span>(s)
+      <span class="kw">and</span> s[i<span class="op">+</span>cnt]<span class="op">==</span>c:
+        cnt<span class="op">+=</span><span class="nm">1</span>
+    res<span class="op">+=</span>c<span class="op">+</span><span class="fn">str</span>(cnt); i<span class="op">+=</span>cnt</pre>
+      </div>
+      <div class="card">
+        <div class="card-title">Word Abbreviation</div>
+        <pre style="font-size:11.5px;padding:10px;"><span class="cm"># "python" → "p4n"</span>
+<span class="kw">def</span> <span class="fn">abbrev</span>(w):
+    <span class="kw">if</span> <span class="fn">len</span>(w) <span class="op">&lt;=</span> <span class="nm">4</span>:
+        <span class="kw">return</span> w
+    <span class="kw">return</span> (w[<span class="nm">0</span>]
+      <span class="op">+</span> <span class="fn">str</span>(<span class="fn">len</span>(w)<span class="op">-</span><span class="nm">2</span>)
+      <span class="op">+</span> w[<span class="op">-</span><span class="nm">1</span>])</pre>
+      </div>
+    </div>
+
+    <div class="note red" style="margin-top:20px;"><strong>Indentation is syntax.</strong> Python uses 4-space indentation — a wrong indent is a runtime error, not a style issue.</div>
+  </div>
+
+</div>
+
+</body>
+</html>
